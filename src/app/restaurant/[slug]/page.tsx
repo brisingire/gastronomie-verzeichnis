@@ -200,7 +200,7 @@ export default function RestaurantDetailPage({
                     : "border-green-300 bg-green-50 text-green-700 hover:bg-green-100"
                 } px-6 py-2`}
               >
-                {isGenerating ? "Lädt Test…" : "Testergebnis freischalten"}
+                {isGenerating ? "Test wird geladen..." : "Testergebnis freischalten"}
               </button>
             </div>
           )}

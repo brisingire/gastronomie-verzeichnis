@@ -21,7 +21,7 @@ export default function HomePage() {
   // ① Autocomplete‐Vorschläge (Substring‐Match über ?query=Term)
   useEffect(() => {
     const term = searchTerm.trim().toLowerCase();
-    if (term.length === 0) {
+    if (term.length <3 ) {
       setSuggestions([]);
       setShowDropdown(false);
       return;
