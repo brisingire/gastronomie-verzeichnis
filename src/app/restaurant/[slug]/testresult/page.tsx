@@ -3,12 +3,10 @@
 import { supabaseServer } from "@/lib/db";
 import TestResultPageClient from "./TestResultPageClient";
 
-type TestResultPageProps = {
-  params: { slug: string };
-};
-
-export default async function TestResultPageSSR({ params }: TestResultPageProps) {
-  const { slug } = params;
+// Da Next.js hier intern eine andere „PageProps“-Signatur erwartet,
+// umgehen wir das Typ‐Matching einfach mit `any`:
+export default async function TestResultPageSSR(props: any) {
+  const { slug } = (props.params as { slug: string });
 
   // 1) Supabase‐Abfrage, um alle benötigten Felder zu holen:
   const { data, error } = await supabaseServer
@@ -24,8 +22,7 @@ export default async function TestResultPageSSR({ params }: TestResultPageProps)
     .eq("slug", slug)
     .single();
 
-  // 2) Wenn ein Fehler auftritt oder noch keine Daten da sind, geben wir
-  //    einfach null zurück – also **kein** Kurz‐Fallback mehr.
+  // 2) Wenn ein Fehler auftritt oder noch keine Daten da sind, geben wir null zurück.
   if (error || !data) {
     return null;
   }

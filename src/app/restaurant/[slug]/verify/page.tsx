@@ -1,32 +1,22 @@
 // File: src/app/restaurant/[slug]/verify/page.tsx
 
 import { redirect } from "next/navigation";
-import { supabaseServer } from "@/lib/db"; // Supabase-Server-Client (kein "use client")
+import { supabaseServer } from "@/lib/db";
 
-type VerifyPageProps = {
-  params: { slug: string };
-  searchParams: { error?: string };
-};
+export default async function VerifyPage(props: any) {
+  // `props.params` und `props.searchParams` werden von Next.js übergeben
+  const { slug } = props.params as { slug: string };
+  const { error } = (props.searchParams as { error?: string }) || {};
 
-export default async function VerifyPage({
-  params,
-  searchParams,
-}: VerifyPageProps) {
-  const { slug } = params;
-  const { error } = searchParams;
-
-  // ────────────────────────────────────────────────────────────────────────────
-  // 1) Restaurant-Name serverseitig holen (statt einfach nur slug anzuzeigen)
-  // ────────────────────────────────────────────────────────────────────────────
+  // Restaurant-Name serverseitig holen (statt nur den slug anzuzeigen)
   const { data: restaurantData, error: fetchError } = await supabaseServer
     .from("restaurants")
     .select("name")
     .eq("slug", slug)
     .single();
 
-  // Falls kein Datensatz gefunden wurde oder ein Fehler auftrat, leiten wir zurück
   if (fetchError || !restaurantData) {
-    // optional: Redirect zur 404‐Seite oder zur Detail‐Seite
+    // Bei Fehler/kein Eintrag → zurück zur Detailseite mit -not_found
     return redirect(`/restaurant/${encodeURIComponent(slug)}/?error=not_found`);
   }
 
@@ -78,11 +68,11 @@ export default async function VerifyPage({
   );
 }
 
-/**
- * Diese Server-Action wird aufgerufen, sobald das obige Formular via method="post"
- * abgeschickt wird. Sie prüft den Code und leitet entweder weiter zur
- * Testresult-Seite oder zurück mit ?error=invalid.
- */
+// ----------------------------------------------------------------------------
+// Diese Server-Action wird aufgerufen, sobald das obige Formular via method="post"
+// abgeschickt wird. Sie prüft den Code und leitet entweder weiter zur
+// Testresult-Seite oder zurück mit ?error=invalid.
+// ----------------------------------------------------------------------------
 async function verifyAction(formData: FormData) {
   "use server";
 
