@@ -1,7 +1,33 @@
 // File: src/lib/test-report-generator.ts
 
-import { createCanvas, loadImage, CanvasRenderingContext2D } from "canvas";
+import { createCanvas, loadImage, registerFont, CanvasRenderingContext2D } from "canvas";
 import path from "path";
+
+/**
+ * Zunächst: Roboto Condensed-Schriften registrieren.
+ * Die TTF-Dateien liegen unter public/fonts/Roboto_Condensed-*.ttf
+ */
+registerFont(
+  path.join(process.cwd(), "public", "fonts", "Roboto_Condensed-Regular.ttf"),
+  { family: "Roboto Condensed", weight: "normal" }
+);
+registerFont(
+  path.join(process.cwd(), "public", "fonts", "Roboto_Condensed-Bold.ttf"),
+  { family: "Roboto Condensed", weight: "bold" }
+);
+
+/**
+ * Helper-Funktion, um eine Schrift im Canvas zu setzen.
+ * Wir verwenden nun "Roboto Condensed" anstelle von "Serif".
+ * 
+ * @param fontSize z. B. 18, 20, etc.
+ * @param bold      true ⇒ weight: "bold", false ⇒ weight: "normal"
+ */
+function getFont(fontSize: number, bold = false): string {
+  const family = "Roboto Condensed";
+  const weight = bold ? "bold" : "normal";
+  return `${weight} ${fontSize}px "${family}"`;
+}
 
 /**
  * Wrappet einen längeren Text so, dass er in einer gegebenen Pixel‐Breite bleibt.
@@ -32,7 +58,7 @@ function wrapText(
 
 /**
  * Zeichnet einen fünfzackigen Stern an Position (cx, cy) mit Radius `radius`.
- * fillRatio: 
+ * fillRatio:
  *   - 1.0 ⇒ vollständig gold‐gefüllt,
  *   - 0.0 ⇒ nur Umriss (hellgrau),
  *   - alles dazwischen ⇒ links anteilig gefüllt.
@@ -110,14 +136,14 @@ function drawStar(
 
 /**
  * Erstellt einen Testbericht (Gastronomie- und Hygienetest) im A4‐Format (als PNG).
- * 
+ *
  * @param restaurantName   Voller Name des Betriebs
  * @param address          Adresse (Straße, PLZ Ort)
  * @param ort              Ort (Stadt) – optional, kann in address integriert sein
  * @param rating           Numerische Bewertung (0 bis 5)
  * @param description      Textbeschreibung (string), z. B. aus deinem CSV-Feld 'beschreibung'
  * @param slug             Dateiname (z. B. "el-greco-..."); dient nur zum Benennen oder Logging
- * @returns                Ein Promise<Buffer> mit den PNG‐Daten
+ * @returns                Ein Promise<Buffer> mit den PNG‐Daten des Testberichts
  */
 export async function createTestReportPng({
   restaurantName,
@@ -150,16 +176,18 @@ export async function createTestReportPng({
   // 2) Kopfbereich: "Gastronomie Verzeichnis"
   // ---------------------------
   const headerText = "Gastronomie Verzeichnis";
-  ctx.font = "18px Serif"; 
-  ctx.fillStyle = "#000000"; // schwarz
-  ctx.fillText(headerText, margin, margin + 18);
+// Mit getFont(fontSize, true) wird die Schriftart fett (weight="bold"):
+    ctx.font = getFont(18, true);
+    ctx.fillStyle = "#000000"; // schwarz
+    ctx.fillText(headerText, margin, margin + 18);
+
 
   // ---------------------------
   // 3) Titelzeile: Name – Adresse, Ort – Deutschland
   //    → Wir umbrechen bei max. 60 Zeichen/Zeile (etwa 90 Zeichen in Pixeln).
   // ---------------------------
   const titleLine = `TESTBERICHT – ${restaurantName} – ${address}, ${ort} – Deutschland`;
-  ctx.font = "18px Serif";
+  ctx.font = getFont(18, false);
   ctx.fillStyle = "#000000";
   const titleLines = wrapText(ctx, titleLine, width - 2 * margin);
   let y = margin + 40;
@@ -172,14 +200,14 @@ export async function createTestReportPng({
   // ---------------------------
   // 4) Unterüberschrift (fett): "Gastronomie- und Hygienetest"
   // ---------------------------
-  ctx.font = "bold 20px Serif";
+  ctx.font = getFont(20, true);
   ctx.fillText("Gastronomie- und Hygienetest", margin, y);
   y += 28;
 
   // ---------------------------
   // 5) Abschnitt Einleitung
   // ---------------------------
-  ctx.font = "20px Serif";
+  ctx.font = getFont(20, false);
   ctx.fillStyle = "#000000";
   ctx.fillText("Einleitung", margin, y);
   y += 28;
@@ -216,7 +244,7 @@ export async function createTestReportPng({
   }
   introText += descIntro;
 
-  ctx.font = "18px Serif";
+  ctx.font = getFont(18, false);
   const introLines = wrapText(ctx, introText, width - 2 * margin - 20);
   for (const line of introLines) {
     ctx.fillText(line, margin + 20, y);
@@ -227,7 +255,7 @@ export async function createTestReportPng({
   // ---------------------------
   // 6) Abschnitt Methodik
   // ---------------------------
-  ctx.font = "20px Serif";
+  ctx.font = getFont(20, false);
   ctx.fillStyle = "#000000";
   ctx.fillText("Methodik", margin, y);
   y += 28;
@@ -236,7 +264,7 @@ export async function createTestReportPng({
     "Die Untersuchung erfolgte auf Basis eines kombinierten Verfahrens, bestehend aus visueller Inspektion, " +
     "unobtrusiven Beobachtungen sowie deskriptiver Datenüberprüfung. " +
     "Standardisierte Bewertungsraster wurden eingesetzt, um eine objektive Vergleichbarkeit zu gewährleisten.";
-  ctx.font = "18px Serif";
+  ctx.font = getFont(18, false);
   const methodLines = wrapText(ctx, methodText, width - 2 * margin - 20);
   for (const line of methodLines) {
     ctx.fillText(line, margin + 20, y);
@@ -247,7 +275,7 @@ export async function createTestReportPng({
   // ---------------------------
   // 7) Abschnitt Ergebnisse (Kategorien + Buchstaben­noten)
   // ---------------------------
-  ctx.font = "20px Serif";
+  ctx.font = getFont(20, false);
   ctx.fillText("Ergebnisse", margin, y);
   y += 28;
 
@@ -268,7 +296,7 @@ export async function createTestReportPng({
   ];
   const grades = mapRatingToGrades(rating);
 
-  ctx.font = "18px Serif";
+  ctx.font = getFont(18, false);
   for (let i = 0; i < categories.length; i++) {
     const line = `${categories[i]}: ${grades[i]}`;
     ctx.fillText(line, margin + 20, y);
@@ -289,10 +317,10 @@ export async function createTestReportPng({
   const idxDisc = Math.floor(Math.random() * discussionTemplates.length);
   const discussionText = discussionTemplates[idxDisc];
 
-  ctx.font = "20px Serif";
+  ctx.font = getFont(20, false);
   ctx.fillText("Diskussion", margin, y);
   y += 28;
-  ctx.font = "18px Serif";
+  ctx.font = getFont(18, false);
   const discLines = wrapText(ctx, discussionText, width - 2 * margin - 20);
   for (const line of discLines) {
     ctx.fillText(line, margin + 20, y);
@@ -323,10 +351,10 @@ export async function createTestReportPng({
   const idxConc = Math.floor(Math.random() * conclusionTemplates.length);
   const conclusionText = conclusionTemplates[idxConc];
 
-  ctx.font = "20px Serif";
+  ctx.font = getFont(20, false);
   ctx.fillText("Fazit", margin, y);
   y += 28;
-  ctx.font = "18px Serif";
+  ctx.font = getFont(18, false);
   const concLines = wrapText(ctx, conclusionText, width - 2 * margin - 20);
   for (const line of concLines) {
     ctx.fillText(line, margin + 20, y);
@@ -337,14 +365,14 @@ export async function createTestReportPng({
   // ---------------------------
   // 10) Anmerkung des Prüfers (Unterstrichenes Feld)
   // ---------------------------
-  ctx.font = "20px Serif";
+  ctx.font = getFont(20, false);
   ctx.fillText("Anmerkung des Prüfers:", margin, y);
   y += 30;
-  const lineWidth = width - 2 * margin;
+  const lineWidthField = width - 2 * margin;
   for (let i = 0; i < 4; i++) {
     ctx.beginPath();
     ctx.moveTo(margin, y);
-    ctx.lineTo(margin + lineWidth, y);
+    ctx.lineTo(margin + lineWidthField, y);
     ctx.strokeStyle = "#000000";
     ctx.lineWidth = 1;
     ctx.stroke();

@@ -1,7 +1,21 @@
 // src/lib/certificate-generator.ts
 
-import { createCanvas, loadImage, Canvas, CanvasRenderingContext2D } from "canvas";
+import { createCanvas, loadImage, CanvasRenderingContext2D, registerFont } from "canvas";
 import path from "path";
+
+// ---------------------------
+// Schriftart registrieren
+// ---------------------------
+// Hier registrieren wir eine benutzerdefinierte TTF‐Datei aus dem Verzeichnis "src/fonts".
+// Passe den Pfad und den Familiennamen an deine Font‐Datei an.
+registerFont(
+  path.join(process.cwd(), "public", "fonts", "Roboto_Condensed-Regular.ttf"),
+  { family: "Roboto Condensed", weight: "normal" }
+);
+registerFont(
+  path.join(process.cwd(), "public", "fonts", "Roboto_Condensed-Bold.ttf"),
+  { family: "Roboto Condensed", weight: "bold" }
+);
 
 // ---------------------------
 // Konfiguration / Konstanten
@@ -27,13 +41,12 @@ const LOGO_FILENAME = "logo.png";            // lege dein Logo unter /public/log
 const SIGNATURE_FILENAME = "unterschrift.png"; // lege deine Signatur unter /public/unterschrift.png ab
 
 // ---------------------------
-// Helper: lädt System‐Font oder Fallback
+// Helper: liefert einen Canvas‐Font‐String für "Roboto Condensed"
 // ---------------------------
 function getFont(fontSize: number, bold = false): string {
-  // Wir verwenden die generischen Familiennamen "Serif"
-  const family = "Serif";
+  const family = "Roboto Condensed";
   const weight = bold ? "bold" : "normal";
-  return `${weight} ${fontSize}px ${family}`;
+  return `${weight} ${fontSize}px "${family}"`;
 }
 
 // ---------------------------
@@ -58,8 +71,8 @@ function drawStar(
   }
 
   // Bounding‐Box berechnen
-  const xs = points.map(p => p[0]);
-  const ys = points.map(p => p[1]);
+  const xs = points.map((p) => p[0]);
+  const ys = points.map((p) => p[1]);
   const minX = Math.min(...xs);
   const maxX = Math.max(...xs);
   const minY = Math.min(...ys);
@@ -116,7 +129,6 @@ function drawStar(
 // Übergabe: restaurantName (string), address (string), rating (number), slug (string)
 // Liefert: Buffer mit PNG‐Daten
 // ---------------------------
-
 export async function createCertificatePng({
   restaurantName,
   address,
@@ -151,7 +163,7 @@ export async function createCertificatePng({
   // Flagge links (schwarz / rot / gold)
   // Ursprünglich flagY = 50 + 5; jetzt um 3px höher → 50 + 2
   const flagX = 50;
-  const flagY = 50 + 2;
+  const flagY = 50 + 2; // leicht angehoben
   const flagW = 10;
   const segmentH = headerHeight / 3;
   ctx.fillStyle = BLACK;
@@ -167,7 +179,7 @@ export async function createCertificatePng({
   ctx.fillText(
     headerText,
     flagX + flagW + 5,
-    50 + headerHeight // so wie im Python-Code
+    50 + headerHeight // so wie im Python‐Code
   );
 
   // ---------------------------
@@ -301,7 +313,7 @@ export async function createCertificatePng({
     const sigY = CERT_HEIGHT - newH;
     ctx.drawImage(sigImg, 0, sigY, newW, newH);
   } catch {
-    // Falls das Signatur-Bild fehlt, kann hier ggf. Fallback Linie/Datum gezeichnet werden
+    // Falls das Signatur-Bild fehlt, ignorieren wir
   }
 
   // ---------------------------
