@@ -169,18 +169,27 @@ export default function RestaurantDetailPage({
               </h3>
 
               {/* Vorteile-Liste */}
-              <p className="ml-2 text-gray-700 text-sm">Sie sind Inhaber dieses Gastronomiebetriebes? <br></br>Verifzieren Sie jetzt das Testergebnis und profoitieren Sie von zahlreichen Vorteilen:</p>
+              <p className="ml-2 text-gray-700 text-sm">
+                Sie sind Inhaber dieses Gastronomiebetriebes?<br />
+                Verifizieren Sie jetzt das Testergebnis und profitieren Sie von zahlreichen Vorteilen:
+              </p>
               <ul className="mx-auto max-w-md space-y-3 text-left">
                 <li className="flex items-start">
                   <CheckIcon className="h-5 w-5 text-green-600 flex-shrink-0" />
                   <span className="ml-2 text-gray-700 text-sm">
-                    Einsicht in interne Testdetails und Bewertungsergebnis
+                    Einsicht in interne Testdetails und Bewertungsergebnisse
                   </span>
                 </li>
                 <li className="flex items-start">
                   <CheckIcon className="h-5 w-5 text-green-600 flex-shrink-0" />
                   <span className="ml-2 text-gray-700 text-sm">
                     Offizielles Zertifikat für Ihren Gastronomiebetrieb, auch für den kommerziellen Nutzen legitimiert
+                  </span>
+                </li>
+                <li className="flex items-start">
+                  <CheckIcon className="h-5 w-5 text-green-600 flex-shrink-0" />
+                  <span className="ml-2 text-gray-700 text-sm">
+                    Potenzielle Verbesserung der Sichtbarkeit Ihres Gastronomiebetriebs auf Google und Google Maps.
                   </span>
                 </li>
                 <li className="flex items-start">
@@ -194,11 +203,15 @@ export default function RestaurantDetailPage({
               <button
                 onClick={handleVerifyClick}
                 disabled={isGenerating}
-                className={`mt-4 w-full max-w-xs mx-auto rounded border ${
-                  isGenerating
-                    ? "border-gray-300 bg-gray-200 text-gray-500 cursor-not-allowed"
-                    : "border-green-300 bg-green-50 text-green-700 hover:bg-green-100"
-                } px-6 py-2`}
+                className={`
+                  mt-4 w-full max-w-xs mx-auto rounded border cursor-pointer
+                  ${
+                    isGenerating
+                      ? "border-gray-300 bg-gray-200 text-gray-500 cursor-not-allowed"
+                      : "border-green-300 bg-green-50 text-green-700 hover:bg-green-100"
+                  }
+                  px-6 py-2
+                `}
               >
                 {isGenerating ? "Test wird geladen..." : "Testergebnis freischalten"}
               </button>

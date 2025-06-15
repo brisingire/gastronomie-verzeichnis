@@ -102,7 +102,7 @@ export default function TestResultPageClient({
         {!verifiziert && (
           <section className="bg-blue-50 border-l-4 border-blue-600 rounded-sm px-5 py-4 space-y-4">
             <p className="text-gray-800 text-sm sm:text-base">
-              <span className="font-medium text-blue-800">Für einmalig 29,00 €</span> 
+              <span className="font-medium text-blue-800">Für einmalig 29,00 € </span> 
               erhalten Sie das vollständige Testergebnis und das offizielle Zertifikat per E-Mail.
             </p>
             <p className="text-gray-800 text-sm sm:text-base">
@@ -118,7 +118,7 @@ export default function TestResultPageClient({
                   className="mx-auto h-32 object-contain border border-gray-300 rounded-md"
                 />
                 <figcaption className="mt-2 text-xs text-gray-500">
-                  Beispiel: Testergebnis-Ansicht
+                  Beispiel: Vollständiges Testergebnis
                 </figcaption>
               </figure>
               {/* Beispiel Zertifikat */}

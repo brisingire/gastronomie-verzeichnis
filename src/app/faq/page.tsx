@@ -151,10 +151,10 @@ export default function FAQPage() {
     <main className="bg-gray-50 py-8">
       <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
         {/* Seitenüberschrift */}
-        <h1 className="text-2xl font-semibold text-gray-900 mb-6">
+        <h1 className="text-2xl font-semibold text-gray-900 mb-6 text-left">
           Häufig gestellte Fragen (FAQ)
         </h1>
-        <p className="text-xs text-gray-600 mb-8">
+        <p className="text-xs text-gray-600 mb-8 text-left">
           Stand 2025 – wird fortlaufend erweitert
         </p>
 
@@ -169,9 +169,14 @@ export default function FAQPage() {
               >
                 <button
                   onClick={() => toggleItem(id)}
-                  className="w-full flex items-center justify-between px-4 py-3 focus:outline-none cursor-pointer"
+                  className="
+                    w-full flex items-center justify-between
+                    px-2 sm:px-4 py-3
+                    focus:outline-none
+                    cursor-pointer
+                  "
                 >
-                  <span className="text-gray-800 text-sm font-medium">
+                  <span className="text-gray-800 text-sm font-medium text-left">
                     {id} | {question}
                   </span>
                   {isOpen ? (
@@ -181,8 +186,8 @@ export default function FAQPage() {
                   )}
                 </button>
                 {isOpen && (
-                  <div className="px-4 pb-4">
-                    <p className="text-sm text-gray-700 whitespace-pre-line">
+                  <div className="px-2 sm:px-4 pb-4">
+                    <p className="text-sm text-gray-700 whitespace-pre-line text-left">
                       {answer}
                     </p>
                   </div>
