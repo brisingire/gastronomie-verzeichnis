@@ -1,5 +1,4 @@
 // File: src/app/page.tsx
-
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -15,29 +14,36 @@ export default function HomePage() {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // ① Autocomplete‐Vorschläge (Substring‐Match über ?query=Term)
   useEffect(() => {
     const term = searchTerm.trim().toLowerCase();
-    if (term.length <2 ) {
+    if (term.length < 2) {
       setSuggestions([]);
       setShowDropdown(false);
+      setIsLoadingSuggestions(false);
       return;
     }
+    // sobald wir zwei Zeichen haben, öffnen wir das Dropdown und zeigen Loading
+    setShowDropdown(true);
+    setIsLoadingSuggestions(true);
+
     const timeout = setTimeout(async () => {
       try {
         const res = await fetch(`/api/suggest?query=${encodeURIComponent(term)}`);
         const json = await res.json();
         setSuggestions(json.suggestions || []);
-        setShowDropdown((json.suggestions || []).length > 0);
       } catch (err) {
         console.error("Fehler beim Laden der Vorschläge:", err);
         setSuggestions([]);
-        setShowDropdown(false);
+      } finally {
+        setIsLoadingSuggestions(false);
       }
     }, 200);
+
     return () => clearTimeout(timeout);
   }, [searchTerm]);
 
@@ -48,7 +54,6 @@ export default function HomePage() {
       const trimmed = searchTerm.trim();
       if (!trimmed) return;
       setShowDropdown(false);
-      // Nicht mehr ?query=, sondern ?term=
       router.push(`/search?term=${encodeURIComponent(trimmed)}`);
     }
   }
@@ -59,7 +64,6 @@ export default function HomePage() {
     if (s.type === "restaurant") {
       router.push(`/restaurant/${encodeURIComponent(s.value)}`);
     } else {
-      // Stadt-Klick bleibt wie gehabt
       router.push(`/search?city=${encodeURIComponent(s.value)}`);
     }
   }
@@ -96,31 +100,39 @@ export default function HomePage() {
           onChange={(e) => setSearchTerm(e.target.value)}
           onKeyDown={handleKeyDown}
           onFocus={() => {
-            if (suggestions.length > 0) setShowDropdown(true);
+            if (suggestions.length > 0 || isLoadingSuggestions) {
+              setShowDropdown(true);
+            }
           }}
           className="w-full rounded border border-gray-300 bg-white px-4 py-3 text-lg outline-none focus:border-blue-500"
         />
 
-        {showDropdown && suggestions.length > 0 && (
+        {showDropdown && (
           <ul className="absolute left-0 top-full z-10 mt-1 w-full rounded border border-gray-200 bg-white shadow-lg">
-            {suggestions.map((s) => (
-              <li
-                key={`${s.type}__${s.value}`}
-                onMouseDown={() => handleSelectSuggestion(s)}
-                className="flex justify-between cursor-pointer px-4 py-3 hover:bg-gray-100"
-              >
-                <span className="font-medium">{s.label}</span>
-                <span
-                  className={
-                    s.type === "restaurant"
-                      ? "ml-2 inline-block rounded bg-green-100 px-2 py-0.5 text-sm text-green-700"
-                      : "ml-2 inline-block rounded bg-blue-100 px-2 py-0.5 text-sm text-blue-700"
-                  }
+            {isLoadingSuggestions ? (
+              <li className="px-4 py-3 text-gray-600">Daten werden geladen..</li>
+            ) : suggestions.length > 0 ? (
+              suggestions.map((s) => (
+                <li
+                  key={`${s.type}__${s.value}`}
+                  onMouseDown={() => handleSelectSuggestion(s)}
+                  className="flex justify-between cursor-pointer px-4 py-3 hover:bg-gray-100"
                 >
-                  {s.type === "restaurant" ? "Restaurant" : "Stadt"}
-                </span>
-              </li>
-            ))}
+                  <span className="font-medium">{s.label}</span>
+                  <span
+                    className={
+                      s.type === "restaurant"
+                        ? "ml-2 inline-block rounded bg-green-100 px-2 py-0.5 text-sm text-green-700"
+                        : "ml-2 inline-block rounded bg-blue-100 px-2 py-0.5 text-sm text-blue-700"
+                    }
+                  >
+                    {s.type === "restaurant" ? "Restaurant" : "Stadt"}
+                  </span>
+                </li>
+              ))
+            ) : (
+              <li className="px-4 py-3 text-gray-600">Keine Ergebnisse</li>
+            )}
           </ul>
         )}
       </div>
@@ -128,12 +140,10 @@ export default function HomePage() {
       {/* ------------------------------------------------------------ */}
       {/* Neue Trennlinie + Info-Text weiter nach unten */}
       {/* ------------------------------------------------------------ */}
-      {/* Abstand zwischen Suchfeld und Linie */}
       <div className="mt-12 w-full max-w-xl">
         <hr className="border-gray-300" />
       </div>
 
-      {/* Info-Text unterhalb der Linie */}
       <div className="mt-4 w-full max-w-xl">
         <p className="text-center text-sm text-gray-600">
           Mehr als <span className="font-semibold text-gray-800">300 Webseitenbetreiber</span> vertrauen auf unsere
@@ -146,7 +156,6 @@ export default function HomePage() {
       {/* ------------------------------------------------------------ */}
       {/* Awards */}
       {/* ------------------------------------------------------------ */}
-      {/* Mobile: zentriert, weiter unten (20px über Footer) */}
       <div className="absolute inset-x-0 bottom-20 flex justify-center sm:hidden">
         <img
           src="/awards/award1.jpg"
@@ -160,7 +169,6 @@ export default function HomePage() {
         />
       </div>
 
-      {/* Desktop: fixiert unten rechts */}
       <div className="hidden sm:flex fixed bottom-20 right-6 flex space-x-4 z-50">
         <img
           src="/awards/award1.jpg"
