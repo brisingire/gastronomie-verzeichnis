@@ -1,4 +1,3 @@
-// File: src/app/restaurant/[slug]/testresult/TestResultPageClient.tsx
 "use client";
 
 import { useState, FormEvent } from "react";
@@ -29,6 +28,7 @@ export default function TestResultPageClient({
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
+  const [modalImage, setModalImage] = useState<string | null>(null);
 
   const rawRating = initialData.bewertung;
 
@@ -87,7 +87,7 @@ export default function TestResultPageClient({
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-8">
       <div className="w-full max-w-2xl space-y-8 bg-white border border-gray-200 rounded-md shadow-sm p-6 sm:p-10">
-        {/* ─── Header: Name und Standort ──────────────────────────────────────────── */}
+        {/* Header */}
         <header className="space-y-2">
           <h1 className="text-3xl sm:text-4xl font-serif font-semibold text-gray-900">
             Testergebnis:{" "}
@@ -98,11 +98,11 @@ export default function TestResultPageClient({
           </p>
         </header>
 
-        {/* ─── Verkaufsargumente (nur angezeigt, wenn noch nicht verifiziert) ─────── */}
+        {/* Verkaufsargumente */}
         {!verifiziert && (
           <section className="bg-blue-50 border-l-4 border-blue-600 rounded-sm px-5 py-4 space-y-4">
             <p className="text-gray-800 text-sm sm:text-base">
-              <span className="font-medium text-blue-800">Für einmalig 29,00 € </span> 
+              <span className="font-medium text-blue-800">Für einmalig 29,00 € </span>
               erhalten Sie das vollständige Testergebnis und das offizielle Zertifikat per E-Mail.
             </p>
             <p className="text-gray-800 text-sm sm:text-base">
@@ -110,8 +110,7 @@ export default function TestResultPageClient({
               beziehungsweise kommerzielle Zwecke genutzt werden.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Beispiel Test‐Ergebnis */}
-              <figure className="text-center">
+              <figure className="text-center cursor-pointer" onClick={() => setModalImage("/beispieltest.jpg")}>
                 <img
                   src="/beispieltest.jpg"
                   alt="Beispiel Testergebnis"
@@ -121,8 +120,7 @@ export default function TestResultPageClient({
                   Beispiel: Vollständiges Testergebnis
                 </figcaption>
               </figure>
-              {/* Beispiel Zertifikat */}
-              <figure className="text-center">
+              <figure className="text-center cursor-pointer" onClick={() => setModalImage("/musterzertifikat.jpg")}>
                 <img
                   src="/musterzertifikat.jpg"
                   alt="Beispiel Zertifikat"
@@ -136,7 +134,7 @@ export default function TestResultPageClient({
           </section>
         )}
 
-        {/* ─── Erfolgreich freigeschaltet – Hinweis an den Nutzer ───────────────────── */}
+        {/* Freigeschaltet Hinweis */}
         {verifiziert && (
           <section className="bg-green-50 border-l-4 border-green-600 rounded-sm px-5 py-4 space-y-2">
             <h2 className="text-lg font-semibold text-green-800">Freigeschaltet</h2>
@@ -151,7 +149,7 @@ export default function TestResultPageClient({
           </section>
         )}
 
-        {/* ─── Bewertung NUR anzeigen, wenn verifiziert == true ─────────────────────── */}
+        {/* Bewertung */}
         {verifiziert && (
           <p className="text-gray-700 text-sm sm:text-base">
             <span className="font-medium">Bewertung:</span>{" "}
@@ -163,27 +161,22 @@ export default function TestResultPageClient({
           </p>
         )}
 
-        {/* ─── Bild‐Container mit Blur‐Overlay + Formular ───────────────────────────── */}
-        <div className="relative mt-4 overflow-hidden rounded-md border border-gray-300 bg-gray-100">
+        {/* Bild-Container */}
+        <div className="relative mt-4 overflow-auto rounded-md border border-gray-300 bg-gray-100 max-h-[80vh]">
           {initialData.testergebnis_url ? (
             <>
-              {/* 1) Scharfes Testergebnis‐Bild */}
               <img
                 src={initialData.testergebnis_url}
                 alt="Testergebnis"
-                className="w-full h-auto object-cover"
+                className="w-full h-auto object-contain cursor-pointer"
+                onClick={() => verifiziert && setModalImage(initialData.testergebnis_url)}
               />
-
-              {/* 2) Overlay nur anzeigen, wenn NOCH NICHT verifiziert */}
               {!verifiziert && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  {/* a) Unscharfer Bereich, oben und unten jeweils 12 % frei */}
                   <div
                     className="absolute left-0 right-0 bg-white/50 backdrop-blur-md"
                     style={{ top: "9%", bottom: "16%" }}
                   />
-
-                  {/* b) Formular‐Box, seriös und klar */}
                   <div className="relative w-11/12 max-w-sm bg-white border border-gray-300 rounded-md px-4 py-5 space-y-4 z-10">
                     <h2 className="text-lg font-semibold text-gray-800 text-center">
                       Testergebnis freischalten
@@ -192,9 +185,7 @@ export default function TestResultPageClient({
                       Klicken Sie auf „Jetzt kaufen“, um das vollständige Testergebnis,
                       das Zertifikat und die Rechnung sofort per E-Mail zu erhalten.
                     </p>
-
                     <form onSubmit={handleSubmit} className="space-y-3">
-                      {/* E-Mail-Feld */}
                       <div>
                         <label
                           htmlFor="email"
@@ -209,14 +200,9 @@ export default function TestResultPageClient({
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="beispiel@domain.de"
-                          className="
-                            mt-1 block w-full rounded-sm border border-gray-300 px-2 py-1
-                            focus:border-gray-700 focus:outline-none text-xs
-                          "
+                          className="mt-1 block w-full rounded-sm border border-gray-300 px-2 py-1 focus:border-gray-700 focus:outline-none text-xs"
                         />
                       </div>
-
-                      {/* Verifizierungscode-Feld */}
                       <div>
                         <label
                           htmlFor="verifizierungscode"
@@ -232,13 +218,9 @@ export default function TestResultPageClient({
                           value={code}
                           onChange={(e) => setCode(e.target.value)}
                           placeholder="1234"
-                          className="
-                            mt-1 block w-full rounded-sm border border-gray-300 px-2 py-1
-                            focus:border-gray-700 focus:outline-none text-center text-xs
-                          "
+                          className="mt-1 block w-full rounded-sm border border-gray-300 px-2 py-1 focus:border-gray-700 focus:outline-none text-center text-xs"
                         />
                       </div>
-
                       {submitError && (
                         <p className="text-xs text-red-600">{submitError}</p>
                       )}
@@ -248,16 +230,11 @@ export default function TestResultPageClient({
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className={`
-                          mt-1 w-full
-                          ${
-                            isSubmitting
-                              ? "bg-gray-400 cursor-not-allowed"
-                              : "bg-blue-700 hover:bg-blue-800"
-                          }
-                          text-white py-2 rounded-sm text-sm
-                          transition
-                        `}
+                        className={`mt-1 w-full ${
+                          isSubmitting
+                            ? "bg-gray-400 cursor-not-allowed"
+                            : "bg-blue-700 hover:bg-blue-800"
+                        } text-white py-2 rounded-sm text-sm transition`}
                       >
                         {isSubmitting ? "Bitte warten…" : "Jetzt kaufen"}
                       </button>
@@ -272,6 +249,30 @@ export default function TestResultPageClient({
             </div>
           )}
         </div>
+
+        {/* Modal für vergrößerte Bilder */}
+        {modalImage && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setModalImage(null);
+            }}
+          >
+            <div className="relative max-w-[90vw] max-h-[90vh] overflow-auto bg-white rounded-md p-4">
+              <img
+                src={modalImage}
+                alt="Vergrößertes Bild"
+                className="max-w-full max-h-[90vh] object-contain"
+              />
+              <button
+                onClick={() => setModalImage(null)}
+                className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold shadow-lg hover:bg-red-600 transition"
+              >
+                X
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );
