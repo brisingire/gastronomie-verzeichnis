@@ -53,7 +53,7 @@ export default async function VerifyPage(props: any) {
             type="text"
             maxLength={6}
             placeholder="6‐stelliger Code"
-            className="w-full rounded border border-gray-300 px-3 py-2 text-center text-base outline-none focus:border-blue-500"
+            className="w-full rounded border border-gray-300  px-3 py-2 text-center text-gray-700 text-base outline-none focus:border-blue-500"
           />
 
           <button

@@ -200,7 +200,7 @@ export default function TestResultPageClient({
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="beispiel@domain.de"
-                          className="mt-1 block w-full rounded-sm border border-gray-300 px-2 py-1 focus:border-gray-700 focus:outline-none text-xs"
+                          className="mt-1 block w-full rounded-sm border border-gray-300 text-gray-700 px-2 py-1 focus:border-gray-700 focus:outline-none text-xs"
                         />
                       </div>
                       <div>
@@ -218,7 +218,7 @@ export default function TestResultPageClient({
                           value={code}
                           onChange={(e) => setCode(e.target.value)}
                           placeholder="1234"
-                          className="mt-1 block w-full rounded-sm border border-gray-300 px-2 py-1 focus:border-gray-700 focus:outline-none text-center text-xs"
+                          className="mt-1 block w-full rounded-sm border border-gray-300 text-gray-700 px-2 py-1 focus:border-gray-700 focus:outline-none text-center text-xs"
                         />
                       </div>
                       {submitError && (
