@@ -104,7 +104,7 @@ export default function HomePage() {
               setShowDropdown(true);
             }
           }}
-          className="w-full rounded border border-gray-300 bg-white px-4 py-3 text-lg text-gray-900 placeholder-gray-600 outline-none focus:border-blue-500"
+          className="w-full rounded border border-gray-300 bg-white px-4 py-3 text-lg text-gray-700 placeholder-gray-600 outline-none focus:border-blue-500"
         
         />
 
