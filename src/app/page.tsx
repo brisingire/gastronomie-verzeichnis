@@ -119,7 +119,7 @@ export default function HomePage() {
                   onMouseDown={() => handleSelectSuggestion(s)}
                   className="flex justify-between cursor-pointer px-4 py-3 hover:bg-gray-100"
                 >
-                  <span className="font-medium">{s.label}</span>
+                  <span className="font-medium text-gray-600">{s.label}</span>
                   <span
                     className={
                       s.type === "restaurant"
