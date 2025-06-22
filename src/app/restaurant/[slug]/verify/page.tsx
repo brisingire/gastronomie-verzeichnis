@@ -31,7 +31,7 @@ export default async function VerifyPage(props: any) {
 
         {/* Statt slug zeigen wir hier den Restaurant-Namen */}
         <p className="text-sm text-gray-700 leading-relaxed">
-          Gib bitte den sechsstelligen Verifizierungscode für{" "}
+          Geben Sie bitte den sechsstelligen Verifizierungscode für{" "}
           <strong className="text-gray-800">{restaurantName}</strong> ein.
         </p>
 

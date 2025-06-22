@@ -177,13 +177,13 @@ export default function RestaurantDetailPage({
                 <li className="flex items-start">
                   <CheckIcon className="h-5 w-5 text-green-600 flex-shrink-0" />
                   <span className="ml-2 text-gray-700 text-sm">
-                    Einsicht in interne Testdetails und Bewertungsergebnisse
+                    Einsicht in interne Testdetails und Bewertungsergebnisse.
                   </span>
                 </li>
                 <li className="flex items-start">
                   <CheckIcon className="h-5 w-5 text-green-600 flex-shrink-0" />
                   <span className="ml-2 text-gray-700 text-sm">
-                    Offizielles Zertifikat für Ihren Gastronomiebetrieb, auch für den kommerziellen Nutzen legitimiert
+                    Offizielles Zertifikat für Ihren Gastronomiebetrieb, auch für den kommerziellen Nutzen legitimiert.
                   </span>
                 </li>
                 <li className="flex items-start">
@@ -195,7 +195,7 @@ export default function RestaurantDetailPage({
                 <li className="flex items-start">
                   <CheckIcon className="h-5 w-5 text-green-600 flex-shrink-0" />
                   <span className="ml-2 text-gray-700 text-sm">
-                    Über 300 Webseitenbetreiber und tausende Nutzer vertrauen auf unsere Expertise
+                    Über 300 Webseitenbetreiber und tausende Nutzer vertrauen auf unsere Expertise.
                   </span>
                 </li>
               </ul>
