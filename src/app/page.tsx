@@ -95,7 +95,7 @@ export default function HomePage() {
         <input
           ref={inputRef}
           type="text"
-          placeholder="Suche nach Stadt oder Restaurant…"
+          placeholder="Suche nach Stadt oder Gastronomiebetrieb.."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           onKeyDown={handleKeyDown}
