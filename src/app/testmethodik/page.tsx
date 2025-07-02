@@ -297,6 +297,18 @@ export default function TestmethodikPage() {
             Stellungnahme-Recht.
           </p>
         </section>
+        {/* ─────────────────────────────────────────────────────────────────────────── */}
+        {/* 9. Automatisierte Bewertung & Hinweis */}
+        {/* ─────────────────────────────────────────────────────────────────────────── */}
+        <section className="mt-6 mb-12 space-y-2">
+          <h2 className="text-lg font-medium text-gray-800">9. Automatisierte Bewertung & Hinweis</h2>
+          <p className="text-sm text-gray-700 leading-relaxed">
+            Es besteht auch die Möglicheit das die Evaluierung eines Betriebs vollständig oder teilweise auf KI-gestützten Verfahren basieren. 
+            Die Auswahl und Gewichtung der Kriterien erfolgt dabei nach den gleichen wissenschaftlichen Standards wie bei klassischen Prüfungen. 
+            Alle automatisierten Bewertungen werden als solche gekennzeichnet. 
+            Die Bewertungsstelle übernimmt keine Gewähr für die Richtigkeit und Vollständigkeit der automatisiert ermittelten Ergebnisse; sie dienen der Information und Orientierung, begründen jedoch keinen Rechtsanspruch.
+          </p>
+        </section>
       </div>
     </main>
   );

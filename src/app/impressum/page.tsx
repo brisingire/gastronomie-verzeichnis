@@ -12,10 +12,10 @@
             <section>
             <h2 className="text-xl font-medium mt-4">Anbieter</h2>
             <p className="mt-2">
-                Jonas Amthor<br />
-                Talhof 1<br />
-                89522 Heidenheim<br />
-                Deutschland
+                Jonas Amthor (Geschäftsinhaber)<br />
+                Damyan Gruev 8A<br />
+                1303 Sofia<br />
+                Bulgarien
             </p>
             </section>
 
@@ -39,10 +39,10 @@
             <section>
             <h2 className="text-xl font-medium mt-6">Verantwortlich gemäß § 55 RStV</h2>
             <p className="mt-2">
-                Jonas Amthor<br />
-                Talhof 1<br />
-                89522 Heidenheim<br />
-                Deutschland
+                Jonas Amthor (Geschäftsinhaber)<br />
+                Damyan Gruev 8A<br />
+                1303 Sofia<br />
+                Bulgarien
             </p>
             </section>
             <section>
@@ -57,8 +57,8 @@
 
             {/* Umsatzsteuer-ID */}
             <section>
-            <h2 className="text-xl font-medium mt-6">Umsatzsteuer-Identifikationsnummer</h2>
-            <p className="mt-2">USt-ID: DE 181058425</p>
+            <h2 className="text-xl font-medium mt-6">Bulsat-Steuernummer</h2>
+            <p className="mt-2">Steuernummer: 181058425</p>
             </section>
 
 
